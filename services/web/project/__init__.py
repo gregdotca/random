@@ -2,6 +2,7 @@
 from flask import Flask, render_template, request
 from gjcode import rand as gjcr
 
+APP_TITLE = "Randomizer"
 default_options = 2
 default_rolls = 100000
 default_details = 1
@@ -18,6 +19,7 @@ def home():
         options=default_options,
         rolls=default_rolls,
         details=default_details,
+        app_title=APP_TITLE,
     )
 
 
@@ -55,7 +57,7 @@ def home_post():
     )
 
     return render_template(
-        "home.html", options=options, rolls=rolls, details=details, result=result
+        "home.html", options=options, rolls=rolls, details=details, page_body=result, app_title=APP_TITLE
     )
 
 

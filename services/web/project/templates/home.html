@@ -1,37 +1,37 @@
-<html>
+<html data-theme="bumblebee">
 <head>
-    <title>Random</title>
-    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename='favicon.png')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='nomalize.css')}}">
-    <link rel="stylesheet" href="{{url_for('static', filename='main.css')}}">
-    <script type="text/javascript" src="{{url_for('static', filename='jquery-1.6.2.min.js')}}"></script>
+    <title>{{ app_title }}</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
+    <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.7.1.min.js') }}"></script>
     {% include 'custom.headers' ignore missing %}
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/themes.css" rel="stylesheet" type="text/css" />
 </head>
-<body style="padding: 12px 0 0 27px;">
-<h3 style="margin: 10px 10px 10px 0;"><a href="/" style="color: #000000; text-decoration: none;">Random</a></h3>
-<form method="POST">
-    <label># of Options</label><BR>
-    <input style="padding: 3px; margin-top: 3px;" id="options" name="options" placeholder="2" size="7" maxlength="4" value="{{ options }}" autofocus><BR>
-    <BR>
-    <label># of Rolls</label><BR>
-    <input style="padding: 4px; margin-top: 1px;" id="rolls" name="rolls" placeholder="100,000" size="7" maxlength="7" value="{{ rolls }}"><BR>
-    <BR>
-    <label for="details">Show full results?</label>
-    {% if details == 1 %}
-        <input id="details" type="checkbox" name="details" value="1" checked><BR>
-    {% else %}
-        <input id="details" type="checkbox" name="details" value="1"><BR>
-    {% endif %}
-    <BR>
-    <input type="submit" value="Randomize!" onclick="$('#loading').show();">
-    <div id="loading" style="display:none;"><img height="100px" width="100px" src="{{url_for('static', filename='spinner.gif')}}"></div>
-</form>
-
-{% if result %}
-    <p style="padding: 5px 0 0 0;">{{ result|safe }}</p>
-{% endif %}
-
-<script src="{{url_for('static', filename='modernizr-3.11.2.min.js')}}"></script>
-<script src="{{url_for('static', filename='plugins.js')}}"></script>
+<body class="p-8">
+<div id="content">
+    <h1 class="text-2xl mb-3"><a href="/">{{ app_title }}</a></h1>
+    <form method="POST" action="/" class="form pb-7">
+        <div class="flex justify-left">
+            <fieldset class="fieldset bg-base-200 border border-base-300 p-10 px-15 -ml-1 rounded-box">
+                <label># of Options<BR>
+                <input id="options" class="input mt-1" name="options" placeholder="2" size="7" maxlength="4" value="{{ options }}" autofocus></label>
+                <BR>
+                <label># of Rolls<BR>
+                <input id="rolls" class="input mt-1" name="rolls" placeholder="100,000" size="7" maxlength="7" value="{{ rolls }}"></label>
+                <BR>
+                <label for="details">Show full results?&nbsp;
+                {% if details == 1 %}
+                    <input id="details" type="checkbox" name="details" value="1" checked></label><BR>
+                {% else %}
+                    <input id="details" type="checkbox" name="details" value="1"></label><BR>
+                {% endif %}
+                <input type="submit" class="btn btn-accent" value="Randomize!" onclick="$('#loading').show();">
+            </fieldset>
+        </div>
+        <div id="loading" style="display: none;"><button class="btn btn-accent loading mt-8"></button></div>
+    </form>
+    {{ page_body|safe }}
+</div>
 </body>
 </html>
