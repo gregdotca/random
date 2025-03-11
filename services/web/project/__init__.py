@@ -3,49 +3,48 @@ from flask import Flask, render_template, request
 from gjcode import rand as gjcr
 
 APP_TITLE = "Randomizer"
-default_options = 2
-default_rolls = 100000
-default_details = 1
-max_options = 1000
-max_rolls = 1000000
+DEFAULT_OPTIONS = 2
+DEFAULT_ROLLS = 100000
+DEFAULT_DETAILS = 1
+MAX_OPTIONS = 1000
+MAX_ROLLS = 1000000
 
 app = Flask(__name__, static_folder="assets")
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     return render_template(
         "home.html",
-        options=default_options,
-        rolls=default_rolls,
-        details=default_details,
+        options=DEFAULT_OPTIONS,
+        rolls=DEFAULT_ROLLS,
+        details=DEFAULT_DETAILS,
         app_title=APP_TITLE,
     )
 
 
 @app.route("/", methods=["POST"])
 def home_post():
-
     try:
         options = int(request.form["options"])
     except Exception:
-        options = default_options
+        options = DEFAULT_OPTIONS
 
     try:
         rolls = int(request.form["rolls"])
     except Exception:
-        rolls = default_rolls
+        rolls = DEFAULT_ROLLS
 
     try:
         details = int(request.form["details"])
     except Exception:
         details = 0
 
-    if options > max_options:
-        options = max_options
+    if options > MAX_OPTIONS:
+        options = MAX_OPTIONS
 
-    if rolls > max_rolls:
-        rolls = max_rolls
+    if rolls > MAX_ROLLS:
+        rolls = MAX_ROLLS
 
     result = str(gjcr.rand(options, rolls, details))
 
