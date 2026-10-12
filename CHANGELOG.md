@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- Hide the loading spinner when Back returns to the page. The form shows the spinner on submit, and when the visitor went back, the browser could restore the page from its back/forward cache with the spinner still showing, as if a new roll had started. A `pageshow` handler now hides it whenever the page is shown. File changed: `services/web/project/templates/home.html:36-41`.
 - Fix a server error when the number of options is 0 or negative, and accept thousands separators in the form. The app capped both numbers at their maximums but had no minimum, so `options=0` made gjcode raise `ValueError: empty range in randint(1, 0)` and the visitor got a 500 error; 0 or negative rolls gave a result with no winner. Both values are now kept between 1 and their maximums. Separately, the rolls placeholder suggested typing `100,000`, but `int()` rejects commas, so the app silently used the default instead; commas are now stripped first. The fields are also `type="number"` with `min` and `max`, so browsers catch bad values before submitting.
   - `services/web/project/__init__.py:28-35`: add `form_int`, which strips commas, falls back to the default, and clamps the value; pass the maximums to the template.
   - `services/web/project/templates/home.html:18,21`: number fields with `min` and `max`, and a placeholder without a comma.

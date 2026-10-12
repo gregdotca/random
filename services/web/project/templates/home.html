@@ -33,5 +33,11 @@
     </form>
     {{ page_body|safe }}
 </div>
+<script>
+    // Hide the spinner when Back restores this page from the browser's cache
+    window.addEventListener('pageshow', function () {
+        document.getElementById('loading').hidden = true;
+    });
+</script>
 </body>
 </html>
