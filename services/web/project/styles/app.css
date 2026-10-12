@@ -17,3 +17,17 @@
         --radius-box: 1rem;
     }
 }
+
+/* The WINNER! label, added to the results by project/__init__.py. Plain red was about 4:1 on
+   both backgrounds and daisyUI's error colours are under 3:1, so these reds are chosen for
+   contrast: 6.7:1 on bumblebee's base-100 and 6.1:1 on business's. */
+.winner {
+    color: oklch(50% .2 27);
+    font-weight: bold;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme]) .winner {
+        color: oklch(72% .17 22);
+    }
+}

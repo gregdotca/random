@@ -2,6 +2,10 @@
 
 ## 2026-10-11
 
+- Raise the contrast of the red `WINNER!` label in the full results. It was styled inline as plain `red`, which is about 4.0:1 on the light background and 4.1:1 on the dark one, under the 4.5:1 that WCAG asks for normal-size text. daisyUI's own error colours are worse (2.9:1 and 2.7:1), so the label now has its own red for each mode: `oklch(50% .2 27)` in light mode (6.7:1) and `oklch(72% .17 22)` in dark mode (6.1:1). The Python code outputs a `winner` class instead of an inline style, and the colours are in a plain CSS rule, which Tailwind always keeps (unlike utility classes, which are only built if a template uses them).
+  - `services/web/project/__init__.py:55`: output `<span class='winner'>` instead of the inline style.
+  - `services/web/project/styles/app.css`: add the `.winner` rule and its dark-mode colour.
+  - `CLAUDE.md`: describe the `winner` class.
 - Update Python from 3.9 to 3.14, Flask from 2.3.0 to 3.1.3, Werkzeug from 2.3.0 to 3.1.9, gunicorn from 20.1.0 to 26.2.0, and flake8 from 3.9.1 to 7.4.1, and remove Flask-SQLAlchemy and psycopg2-binary. Python 3.9 reached end of life in October 2025, so it no longer gets security fixes. gunicorn 20.1.0 has a request-smuggling vulnerability (CVE-2024-1135, fixed in 22.0.0). Flask-SQLAlchemy and psycopg2-binary were never imported, and psycopg2-binary 2.8.6 has no wheels for Python 3.14, so it would have broken the build. gunicorn 26 also adds a control socket for its `gunicornc` tool, which this app doesn't use; gunicorn would try to create it in `/home/app/.gunicorn`, which the `app` user can't write to, so it's turned off with `--no-control-socket`.
   - `services/web/requirements.txt`: new Flask, Werkzeug, and gunicorn versions; remove the unused packages.
   - `services/web/Dockerfile:6,35,52`: `python:3.14.7-slim` for both stages, and flake8 7.4.1.

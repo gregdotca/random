@@ -52,7 +52,7 @@ def home_post():
         result = result.replace("\n", "<BR>")
 
     result = result.replace(
-        "WINNER!", "<span style='color: red; font-weight: bold;'>WINNER!</span>"
+        "WINNER!", "<span class='winner'>WINNER!</span>"
     )
 
     return render_template(
