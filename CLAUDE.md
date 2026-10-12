@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Production (the tracked config): gunicorn on container port 5000, published on host port 8088.
+Production (the tracked config): gunicorn on container port 5000, published on host port 8088. The gunicorn command has `--no-control-socket` because the app doesn't use gunicorn's `gunicornc` control tool, and the `app` user can't create its default socket in `/home/app/.gunicorn`.
 
 ```bash
 docker-compose up -d --build
@@ -17,7 +17,7 @@ docker-compose up -d --build
 Lint. The Docker builder stage runs this, so a lint failure fails the build. To run it on the host, install the same flake8 version first:
 
 ```bash
-pip install flake8==3.9.1
+pip install flake8==7.4.1
 cd services/web && flake8 --ignore=E501,W503,F401 .
 ```
 
@@ -41,5 +41,3 @@ All code is in `services/web/`:
 - **CSS build:** Tailwind 4 and daisyUI 5 are built at Docker build time, not loaded from a CDN. The Tailwind standalone CLI (version and per-architecture SHA-256s pinned as `ARG`s in the Dockerfile builder stage) compiles `project/styles/app.css` into `project/assets/app.css` (gitignored), and the final stage copies the built file in. `source(none)` plus `@source "../templates"` means it scans only `project/templates/`, so a class used only from Python or JS (such as in the `page_body` HTML) won't be in the build unless it also appears in a template. daisyUI is the vendored plugin `project/styles/daisyui-<version>.mjs`. To upgrade either one, update the Dockerfile `ARG`s (and `Dockerfile.DEV`), or replace the `.mjs` file and its reference in `app.css`.
 - **Dark mode:** automatic only, with no toggle, JavaScript, or `data-theme` attribute. `bumblebee --default, business --prefersdark` in `project/styles/app.css` puts `business` inside `@media (prefers-color-scheme: dark)` on `:root:not([data-theme])`, so adding `data-theme` to `<html>` would lock the page to one theme. A `color-scheme` meta tag in `home.html` tells the browser about both modes before the CSS loads. Use daisyUI theme colours (`base-content`, `base-200`, and so on), not hard-coded colour classes (`text-gray-*`, `bg-white`), so both modes keep working. Tailwind's `dark:` variant uses the same media query, so per-mode tweaks go there (the Randomize button is `btn-accent dark:btn-primary`). Dark-mode overrides of theme variables live in an unlayered rule at the end of `project/styles/app.css`: a darker `--color-primary` for the button, and `bumblebee`'s `--radius-*` corner sizes so both modes match. Being unlayered, it beats daisyUI's layered theme.
 - `project/templates/custom.headers`: optional, gitignored, deployment-specific HTML (e.g. analytics) included in `<head>` via `{% include ... ignore missing %}`.
-
-`requirements.txt` lists Flask-SQLAlchemy and psycopg2-binary, but the app doesn't use them.
