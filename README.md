@@ -1,5 +1,7 @@
 Random
 ------
+[![ACR B1b](https://img.shields.io/badge/ACR-B1b-2140B5)](ACR.md)
+
 ## Demo
 
 https://random.greg.ca
