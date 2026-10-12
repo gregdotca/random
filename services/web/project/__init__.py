@@ -19,32 +19,31 @@ def home():
         options=DEFAULT_OPTIONS,
         rolls=DEFAULT_ROLLS,
         details=DEFAULT_DETAILS,
+        max_options=MAX_OPTIONS,
+        max_rolls=MAX_ROLLS,
         app_title=APP_TITLE,
     )
 
 
+def form_int(field, default, maximum):
+    # Accept thousands separators ("100,000"), fall back to the default on
+    # bad input, and keep the value between 1 and the maximum.
+    try:
+        value = int(request.form[field].replace(",", ""))
+    except Exception:
+        return default
+    return max(1, min(value, maximum))
+
+
 @app.route("/", methods=["POST"])
 def home_post():
-    try:
-        options = int(request.form["options"])
-    except Exception:
-        options = DEFAULT_OPTIONS
-
-    try:
-        rolls = int(request.form["rolls"])
-    except Exception:
-        rolls = DEFAULT_ROLLS
+    options = form_int("options", DEFAULT_OPTIONS, MAX_OPTIONS)
+    rolls = form_int("rolls", DEFAULT_ROLLS, MAX_ROLLS)
 
     try:
         details = int(request.form["details"])
     except Exception:
         details = 0
-
-    if options > MAX_OPTIONS:
-        options = MAX_OPTIONS
-
-    if rolls > MAX_ROLLS:
-        rolls = MAX_ROLLS
 
     result = str(gjcr.rand(options, rolls, details))
 
@@ -56,7 +55,8 @@ def home_post():
     )
 
     return render_template(
-        "home.html", options=options, rolls=rolls, details=details, page_body=result, app_title=APP_TITLE
+        "home.html", options=options, rolls=rolls, details=details, page_body=result,
+        max_options=MAX_OPTIONS, max_rolls=MAX_ROLLS, app_title=APP_TITLE
     )
 
 

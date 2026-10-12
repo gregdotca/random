@@ -2,6 +2,19 @@
 
 ## 2026-10-11
 
+- Fix a server error when the number of options is 0 or negative, and accept thousands separators in the form. The app capped both numbers at their maximums but had no minimum, so `options=0` made gjcode raise `ValueError: empty range in randint(1, 0)` and the visitor got a 500 error; 0 or negative rolls gave a result with no winner. Both values are now kept between 1 and their maximums. Separately, the rolls placeholder suggested typing `100,000`, but `int()` rejects commas, so the app silently used the default instead; commas are now stripped first. The fields are also `type="number"` with `min` and `max`, so browsers catch bad values before submitting.
+  - `services/web/project/__init__.py:28-35`: add `form_int`, which strips commas, falls back to the default, and clamps the value; pass the maximums to the template.
+  - `services/web/project/templates/home.html:18,21`: number fields with `min` and `max`, and a placeholder without a comma.
+  - `CLAUDE.md`: describe the input handling.
+- Remove jQuery. The vendored 87 KB `jquery-3.7.1.min.js` was only used to show the loading spinner. The spinner is now a `hidden` div that the form's `onsubmit` unhides, which also means it no longer appears when the browser blocks an invalid submit.
+  - `services/web/project/templates/home.html:14,29,32`: drop the script tag from `<head>`, move the handler to the form, and use the `hidden` attribute.
+  - `services/web/project/assets/jquery-3.7.1.min.js`: removed.
+  - `CLAUDE.md`: update the static files note.
+- Clean up the Docker setup. `FLASK_ENV` has done nothing since Flask 2.3; `netcat-openbsd` in the final image and `gcc` in the builder were leftovers from an old database setup (every dependency installs from a prebuilt wheel); and `FROM ... as` and `ENV KEY value` caused BuildKit warnings. With no `.dockerignore`, the build also copied the Dockerfiles, `__pycache__`, and the dev build of `app.css` into the image.
+  - `services/web/Dockerfile:6,12-13,17`: `AS`, `ENV KEY=value`, and no `gcc`; the final stage no longer installs `netcat-openbsd`.
+  - `docker-compose.yml`: remove `FLASK_ENV` and the commented-out `version` line.
+  - `services/web/.dockerignore`: new.
+
 - Update gjcode from 0.0.13 to 0.0.14. The full results now show the number of options with a thousands separator (`Options: 1,000`), matching the rolls line. 0.0.14 also removes `rand_print`, which this app doesn't use. File changed: `services/web/requirements.txt:2`.
 - Raise the contrast of the red `WINNER!` label in the full results. It was styled inline as plain `red`, which is about 4.0:1 on the light background and 4.1:1 on the dark one, under the 4.5:1 that WCAG asks for normal-size text. daisyUI's own error colours are worse (2.9:1 and 2.7:1), so the label now has its own red for each mode: `oklch(50% .2 27)` in light mode (6.7:1) and `oklch(72% .17 22)` in dark mode (6.1:1). The Python code outputs a `winner` class instead of an inline style, and the colours are in a plain CSS rule, which Tailwind always keeps (unlike utility classes, which are only built if a template uses them).
   - `services/web/project/__init__.py:55`: output `<span class='winner'>` instead of the inline style.
