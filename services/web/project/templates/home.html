@@ -1,5 +1,6 @@
-<html data-theme="bumblebee">
+<html>
 <head>
+    <meta name="color-scheme" content="light dark">
     <title>{{ app_title }}</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.png') }}">
     <script type="text/javascript" src="{{ url_for('static', filename='jquery-3.7.1.min.js') }}"></script>
@@ -24,7 +25,7 @@
                 {% else %}
                     <input id="details" type="checkbox" name="details" value="1"></label><BR>
                 {% endif %}
-                <input type="submit" class="btn btn-accent" value="Randomize!" onclick="$('#loading').show();">
+                <input type="submit" class="btn btn-accent dark:btn-primary" value="Randomize!" onclick="$('#loading').show();">
             </fieldset>
         </div>
         <div id="loading" class="pt-8" style="display: none;"><span class="loading loading-circle loading-xl"></span></div>
