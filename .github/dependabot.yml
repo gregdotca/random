@@ -1,0 +1,13 @@
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /services/web
+    schedule:
+      interval: monthly
+    groups:
+      pip:
+        patterns: ["*"]
+  - package-ecosystem: docker
+    directory: /services/web
+    schedule:
+      interval: monthly
