@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-12
+
+- Add a 7-day cooldown to both Dependabot updaters, so version updates only propose releases that have been out for at least 7 days. A bad or hijacked release then has time to be caught and pulled before Dependabot suggests it; security fix PRs aren't delayed. The other Flask tools got the same setting when their Dependabot configs were added, so all of them now match. File changed: `.github/dependabot.yml`.
+
 ## 2026-10-11
 
 - Add Dependabot version updates. Dependabot alerts and automatic security fix PRs are now turned on in the GitHub repo's settings (not in this file), but those only cover known vulnerabilities; nothing kept the pinned packages or the Python base image current otherwise. Dependabot now checks `requirements.txt` and the `Dockerfile` base image once a month, with all pip updates grouped into one PR. The versions pinned inside the `Dockerfile`'s build steps (flake8 and the Tailwind CLI) aren't covered and still need updating by hand. GitHub Actions isn't included because the repo has no workflows. File changed: `.github/dependabot.yml` (new).

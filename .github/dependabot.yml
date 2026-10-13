@@ -4,6 +4,8 @@ updates:
     directory: /services/web
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
     groups:
       pip:
         patterns: ["*"]
@@ -11,3 +13,5 @@ updates:
     directory: /services/web
     schedule:
       interval: monthly
+    cooldown:
+      default-days: 7
