@@ -2,6 +2,7 @@
 
 ## 2026-10-12
 
+- Update Python from 3.14.7 to 3.14.8 (`python:3.14.8-slim`) in both stages of the `Dockerfile`. 3.14.8 is an expedited security release (fixes for SSL and tarfile bugs, among others). Tested in the production image: it builds (flake8 passes) and runs, the page and its assets load, and a roll returns a winner within the options, including with 0 options (kept at 1) and a comma in the number of rolls. The locally excluded dev Dockerfile isn't in the repo; it was moved to 3.14.8 by hand to match. File changed: `services/web/Dockerfile:6,52`.
 - Add a 7-day cooldown to both Dependabot updaters, so version updates only propose releases that have been out for at least 7 days. A bad or hijacked release then has time to be caught and pulled before Dependabot suggests it; security fix PRs aren't delayed. The other Flask tools got the same setting when their Dependabot configs were added, so all of them now match. File changed: `.github/dependabot.yml`.
 
 ## 2026-10-11
