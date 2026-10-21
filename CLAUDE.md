@@ -8,7 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Production (the tracked config): gunicorn on container port 5000, published on host port 8088. The gunicorn command has `--no-control-socket` because the app doesn't use gunicorn's `gunicornc` control tool, and the `app` user can't create its default socket in `/home/app/.gunicorn`.
+Production (the tracked config): gunicorn on container port 5000, published on host port 8088 at `${BIND_ADDRESS:-127.0.0.1}`, so only localhost by default. The server sets `BIND_ADDRESS` in a gitignored `.env` next to `docker-compose.yml`; never put a real server IP in the repo. The gunicorn command has `--no-control-socket` because the app doesn't use gunicorn's `gunicornc` control tool, and the `app` user can't create its default socket in `/home/app/.gunicorn`.
 
 ```bash
 docker-compose up -d --build

@@ -10,7 +10,9 @@ https://random.greg.ca
 
 - Clone the repository
 - Run "docker-compose up -d"
-- Load http://IP_ADDRESS:8088 in your web browser
+- Load http://127.0.0.1:8088 in your web browser
+
+By default the port only listens on 127.0.0.1, so the app can't be reached from other machines unless a reverse proxy on the same host forwards to it. To listen on another address, set `BIND_ADDRESS`, either in the shell or in a `.env` file next to `docker-compose.yml` (for example `BIND_ADDRESS=0.0.0.0` for every address).
 
 ## License
 

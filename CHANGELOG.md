@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-21
+
+- Publish the app's port on 127.0.0.1 by default instead of every address. `8088:5000` made Docker listen on all of the host's addresses, so on a server with a public IP the app could be reached directly, skipping the reverse proxy in front of it; Docker's published ports also get past host firewalls like `ufw`. The port is now `${BIND_ADDRESS:-127.0.0.1}:8088:5000`, so it's only reachable from the host itself unless `BIND_ADDRESS` is set, in the shell or in a `.env` file next to `docker-compose.yml`. `.env` is gitignored, so a server's own address stays out of the repository.
+  - `docker-compose.yml:10`: bind the port through `BIND_ADDRESS`, defaulting to 127.0.0.1.
+  - `.gitignore`: ignore `/.env`.
+  - `README.md`: load the app at 127.0.0.1 and explain `BIND_ADDRESS`.
+
 ## 2026-10-12
 
 - Update Python from 3.14.7 to 3.14.8 (`python:3.14.8-slim`) in both stages of the `Dockerfile`. 3.14.8 is an expedited security release (fixes for SSL and tarfile bugs, among others). Tested in the production image: it builds (flake8 passes) and runs, the page and its assets load, and a roll returns a winner within the options, including with 0 options (kept at 1) and a comma in the number of rolls. The locally excluded dev Dockerfile isn't in the repo; it was moved to 3.14.8 by hand to match. File changed: `services/web/Dockerfile:6,52`.
