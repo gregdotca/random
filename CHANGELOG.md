@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-11
+
+- Link the rating in `ACR.md` to its page on aicoderating.com.
+
 ## 2026-10-21
 
 - Publish the app's port on 127.0.0.1 by default instead of every address. `8088:5000` made Docker listen on all of the host's addresses, so on a server with a public IP the app could be reached directly, skipping the reverse proxy in front of it; Docker's published ports also get past host firewalls like `ufw`. The port is now `${BIND_ADDRESS:-127.0.0.1}:8088:5000`, so it's only reachable from the host itself unless `BIND_ADDRESS` is set, in the shell or in a `.env` file next to `docker-compose.yml`. `.env` is gitignored, so a server's own address stays out of the repository.
